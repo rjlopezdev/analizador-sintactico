@@ -1,0 +1,213 @@
+/******************************************************************************/
+/*************************** ACTIVIDAD SINTACTICA *****************************/
+/*********************************** TLP **************************************/
+/********************************** >2016 *************************************/
+
+PARSER_BEGIN(Analizador)
+     public class Analizador{
+		        public static void main (String[] argum){
+						       try{
+									 		 Analizador an = new Analizador(System.in);
+											 an.Lenguaje();
+											 System.out.println("Analisis terminado.");
+ 										 	 System.out.println("No se han hallado errores.");
+									 } catch(ParseException eSin){
+									 		 System.out.println("Analisis suspendido.");
+ 											 System.out.println("Hallado un error sintactico:");
+ 											 System.out.println(eSin.getMessage());
+									 } catch(TokenMgrError eLex){
+									 		 System.out.println("Analisis suspendido.");
+ 										   System.out.println("Hallado un error lexicografico:");
+ 										   System.out.println(eLex.getMessage());
+									 }
+						}
+		 }
+PARSER_END(Analizador)
+
+/******************************************************************************/
+/******************************** PRODUCCIONES ********************************/
+/******************************************************************************/
+/*                                >***********                                 /
+/*                                  *********                                  /
+/*                                   *******                                   /
+/*                                    *****                                    /
+/*                                     ***                                     /
+/*                                      *                                     */
+
+void Lenguaje(): {} {
+	"LengTLP" <ID> ":"
+	( P_Declarativa() ";" )*
+	"ParteEjec" ( P_Operativa() ";" )+
+	"Fin" "."
+	<EOF>
+}
+
+/******************************************************************************/
+/***************************** PARTE DECLARATIVA ******************************/
+/******************************************************************************/
+
+ void P_Declarativa(): {} {
+	      SubPrg()                  //SUBPROGRAMA
+	    | Union()                   //DECLARACION TIPO
+	    | Variables()               //DECLARACION VARIABLES
+ }
+
+  void Union(): {} {
+       "Union" <ID> "=" <ID> ":" TipoDato() ( "," <ID> ":" TipoDato() )*
+  }
+
+  void Variables(): {} {
+       "Variables" <ID> ( "," <ID> )* ":" TipoDato()
+  }
+
+	void SubPrg(): {} {
+       [ TipoDato() ] "SubPrg" <ID>
+			 [ ListaArgs() ";" ]
+			 ( P_Declarativa_SubPrg() ";" )*
+			 "ParteEjec" P_Operativa_SubPrg()
+			 "Fin"
+	}
+
+  void ListaArgs(): {} {
+       "(" ["dir"] <ID> ":" TipoDato() ( "," ["dir"] <ID> ":" TipoDato() )* ")"
+  }
+
+  void P_Declarativa_SubPrg(): {} {
+         Union()                                          //DECLARACION TIPO
+       | Variables()                                      //DECLARACION VARIABLE
+  }
+
+  void P_Operativa_SubPrg(): {} {
+         Sent_Devolucion() ( Sents_SubPrg() ";" )+
+       | ( Sents_SubPrg() ";" )+ Sent_Devolucion() [ Devolucion_AlFinal_OR_EnMedio() ]
+  }
+
+   void Devolucion_AlFinal_OR_EnMedio(): {} {
+       ( Sents_SubPrg() ";" )+
+   }
+
+   void Sents_SubPrg(): {} {
+          <ID> [ Sent_Llamada_Compleja_OR_Asignacion() ]
+        | Condicional()
+        | Sent_Lectura()
+        | Sent_Grabacion()
+   }
+
+   void Sent_Devolucion(): {} {
+        "Devolver" [ Expresion() ] ";"
+   }
+
+/******************************************************************************/
+/****************************** PARTE OPERATIVA *******************************/
+/******************************************************************************/
+
+ void P_Operativa(): {} {
+        <ID> [ Sent_Llamada_Compleja_OR_Asignacion() ]
+	    | Condicional()
+	    | Sent_Lectura()
+		  | Sent_Grabacion()
+ }
+
+ void Sent_Llamada_Compleja_OR_Asignacion(): {} {
+			"(" Expresion() ( "," Expresion() )* ")"     //SENTENCIA LLAMADA COMPLEJA
+			| Ref_Variable() "=" Expresion()             //ASIGNACION
+ }
+
+   void Ref_Variable(): {} {
+        ( "." <ID> )*
+   }
+
+  void Condicional(): {} {
+       "Condicional" Expresion()
+	     "{" ( P_Operativa() ";" )+ "}"
+	     "{" ( P_Operativa() ";" )* "}"
+  }
+
+	void Sent_Lectura(): {} {
+	     "Leer" "(" <ID> Ref_Variable() ( "," <ID> Ref_Variable() )* ")"
+	}
+
+	void Sent_Grabacion(): {} {
+	     "Grabar" "(" Expresion() ( "," Expresion() )* ")"
+	}
+
+void TipoDato(): {} {
+       <ID>
+		 | "Entero"
+		 | "Real"
+		 | "Logico"
+		 | "Caracter"
+}
+
+void Expresion(): {} {
+     ExpresionSimple() [ OpCom() ExpresionSimple() ]
+}
+ void ExpresionSimple(): {} {
+      Termino() ( OpAdi() Termino() )*
+ }
+
+  void Termino(): {} {
+	     Factor() ( OpMul() Factor() )*
+	}
+
+   void Factor(): {} {
+	        "(" Expresion() ")"
+				|	<ID> Ref_Variable_OR_Sent_Llamada_Compleja()
+				| <CTE_Entera>
+				| <CTE_Real>
+				| <CTE_Logica>
+        | <CTE_Caracter>
+	 }
+
+    void Ref_Variable_OR_Sent_Llamada_Compleja(): {} {
+           "(" Expresion() ( "," Expresion() )* ")"
+         | Ref_Variable()
+    }
+
+	  void OpMul(): {} {
+	         "*"
+		 		 | "/"
+		 	   | "&&"
+	  }
+
+	  void OpAdi(): {} {
+	         "+"
+	 		   | "-"
+	 		 	 | "||"
+	  }
+
+	  void OpCom(): {} {
+	         "=="
+				 | "<>"
+				 | "<"
+				 | "="
+	  }
+
+/******************************************************************************/
+/******************** FORMAS DE CONSTANTES & IDENTIFICADOR ********************/
+/******************************************************************************/
+
+TOKEN: { < #LETRA                  : ["a" - "z", "A" - "Z"]                  > }
+TOKEN: { < #DIGITO                 : ["0" - "9"]                             > }
+
+TOKEN: { < ID                      : <LETRA>
+                                    ( (<LETRA>)* (<DIGITO>)* <LETRA> )*      > }
+
+TOKEN: { < CTE_Entera              : (<DIGITO>)+                             > }
+
+TOKEN: { < CTE_Real                : (<DIGITO>)+ "." (<DIGITO>)+
+									                   ( "e" ("+"|"-") (<DIGITO>)+ )?	         > }
+
+TOKEN: { < CTE_Logica              :   "cierto"
+									                   | "falso"                               > }
+
+TOKEN: { < CTE_Caracter            :   "\"" ~["\"", "\\"] "\""
+                                     | "\"" ( "\\\"" | "\\\\" | "\\n" ) "\"" > }
+
+/******************************************************************************/
+/******************** FORMAS DE COMENTARIOS & SEPARADORES *********************/
+/******************************************************************************/
+
+SKIP: { < FORMATO_LIBRE            : " " | "\t" | "\n" | "\r"                > }
+
+SKIP: { < COMENTARIO               : "/**" ( ~["\n", "#"] )* ( "#" | "\n" )  > }

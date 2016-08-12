@@ -1,0 +1,88 @@
+/******************************************************************************/
+/**************************** PALABRAS RESERVADAS *****************************/
+/******************************************************************************/
+
+P_RES_Fin              : "Fin"
+P_RES_LengTLP          : "LengTLP"
+P_RES_ParteEjec        : "ParteEjec"
+P_RES_Union            : "Union"
+P_RES_Entero           : "Entero"
+P_RES_Real             : "Real"
+P_RES_Logico           : "Logico"
+P_RES_Caracter         : "Caracter"
+P_RES_Variables        : "Variables"
+P_RES_Condicional      : "Condicional"
+P_RES_Leer             : "Leer"
+P_RES_Grabar           : "Grabar"
+P_RES_SubPrg           : "SubPrg"
+P_RES_dir              : "dir"
+P_RES_Devolver         : "Devolver"
+P_RES_falso            : "falso"
+P_RES_cierto           : "cierto"
+
+/******************************************************************************/
+/************************** SIMBOLOS CON SIGNIFICADO **************************/
+/******************************************************************************/
+
+PyC                    : ";"
+DosPuntos              : ":"
+Punto                  : "."
+Coma                   : ","
+Par_Abr                : "("
+Par_Cer                : ")"
+Cor_Abr                : "{"
+Cor_Cer                : "}"
+
+/******************************************************************************/
+/******************************** OPERADORES **********************************/
+/******************************************************************************/
+
+OP_MUL_Producto        : "*"
+OP_MUL_Division        : "/"
+OP_MUL_Conjuncion      : "&&"
+
+OP_ADI_Suma            : "+"
+OP_ADI_Resta           : "-"
+OP_ADI_Disyuncion      : "||"
+
+
+OP_COM_Igual           : "=="
+OP_COM_Distinto        : "<>"
+OP_COM_Menor           : "<"
+OP_COM_Mayor           : ">"
+
+/******************************************************************************/
+/******************** FORMAS DE CONSTANTES & IDENTIFICADOR ********************/
+/******************************************************************************/
+
+LETRA                  : ["a" - "z", "A" - "Z"]
+DIGITO                 : ["0" - "9"]
+
+ID                      : <LETRA>
+                          ( (<LETRA>)* (<DIGITO>)* <LETRA> )*
+
+CTE_Entera              : (<DIGITO>)+
+
+CTE_Real                : (<DIGITO>)+ "." (<DIGITO>)+
+									        ( "e" ("+"|"-") (<DIGITO>)+ )?
+
+CTE_Logica              :   "cierto"
+									          | "falso"
+
+CTE_Caracter            : "\"" ~["\"", "/"] "\""
+                          | "\"\"\""
+                          | "\"\\\""
+                          | "\"\\n\""
+
+/******************************************************************************/
+/******************** CUENTA DE PIEZAS SINTACTICAS TOTALES ********************/
+/******************************************************************************/
+
+TOTAL:
+									                                      PALABRAS RESERVADAS [17]
+	   			                           + FORMAS DE CONSTANTES & IDENTIFICADOR [ 5]
+	  			                           +            SIMBOLOS CON SIGNIFICADO  [ 8]
+	  			                           +                           OPERADORES [10]
+
+
+	                                   =           [*** 40 PIEZAS SINTACTICAS ***]

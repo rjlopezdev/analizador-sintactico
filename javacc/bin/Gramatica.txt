@@ -1,0 +1,103 @@
+
+/******************************************************************************/
+/******************** FORMAS DE COMENTARIOS & SEPARADORES *********************/
+/******************************************************************************/
+<DEFAULT> SKIP : {
+<" " | "\t" | "\n" | "\r">
+}
+
+<DEFAULT> SKIP : {
+<COMENTARIO_MULTILN: "/**" (~["#"])* "#">
+}
+
+<DEFAULT> SKIP : {
+<COMENTARIO_LN: "/**" (~["\n"])* "\n">
+}
+
+NON-TERMINALS
+/******************************************************************************/
+/******************************** PRODUCCIONES ********************************/
+/******************************************************************************/
+/***************************** PARTE DECLARATIVA ******************************/
+
+	Lenguaje	:=	"LengTLP" <ID> ":" ( P_Declarativa ";" )* "ParteEjec" ( P_Operativa ";" )+ "Fin" "." <EOF>
+
+	P_Declarativa	:=	SubPrg
+		|	Union
+		|	Variables
+
+	Union	:=	"Union" <ID> "=" <ID> ":" TipoDato ( "," <ID> ":" TipoDato )*
+
+	Variables	:=	"Variables" <ID> ( "," <ID> )* ":" TipoDato
+
+	SubPrg	:=	[ TipoDato ] "SubPrg" <ID> [ ListaArgs ";" ] ( P_Declarativa_SubPrg ";" )* "ParteEjec" P_Operativa_SubPrg "Fin"
+
+	ListaArgs	:=	"(" [ "dir" ] <ID> ":" TipoDato [ "," ( "dir" ] <ID> ":" TipoDato )* ")"
+
+	P_Declarativa_SubPrg	:=	Union
+		|	Variables
+
+	P_Operativa_SubPrg	:=	Sent_Devolucion ( Sents_SubPrg ";" )+
+		|	( Sents_SubPrg ";" )+ Sent_Devolucion [ Devolucion_AlFinal_OR_EnMedio ]
+
+	Devolucion_AlFinal_OR_EnMedio	:=	( Sents_SubPrg ";" )+
+
+	Sents_SubPrg	:=	<ID> [ Sent_Llamada_Compleja_OR_Asignacion ]
+		|	Condicional
+		|	Sent_Lectura
+		|	Sent_Grabacion
+
+	Sent_Devolucion	:=	"Devolver" [ Expresion ] ";"
+
+P_Operativa	:=	<ID> [ Sent_Llamada_Compleja_OR_Asignacion ]
+		|	Condicional
+		|	Sent_Lectura
+		|	Sent_Grabacion
+
+	Sent_Llamada_Compleja_OR_Asignacion	:=	"(" Expresion ( "," Expresion )* ")"
+		|	Ref_Variable "=" Expresion
+
+	Ref_Variable	:=	( "." <ID> )*
+
+	Condicional	:=	"Condicional" Expresion "{" ( P_Operativa ";" )+ "}" "{" ( P_Operativa ";" )* "}"
+
+	Sent_Lectura	:=	"Leer" "(" <ID> Ref_Variable ( "," <ID> Ref_Variable )* ")"
+
+	Sent_Grabacion	:=	"Grabar" "(" Expresion ( "," Expresion )* ")"
+
+	TipoDato	:=	<ID>
+		|	"Entero"
+		|	"Real"
+		|	"Logico"
+		|	"Caracter"
+
+	Expresion	:=	Termino ( OpMul Termino )*
+
+	Termino	:=	TerminoMenor ( OpAdi TerminoMenor )*
+
+	TerminoMenor	:=	Factor [ OpCom Factor ]
+
+	Factor	:=	"(" Expresion ")"
+		|	<ID> Ref_Variable_OR_Sent_Llamada
+		|	<CTE_Entera>
+		|	<CTE_Real>
+		|	<CTE_Logica>
+		|	<CTE_Caracter>
+
+	Ref_Variable_OR_Sent_Llamada	:=	"(" Expresion ( "," Expresion )* ")"
+		|	Ref_Variable
+
+	OpMul	:=	"*"
+		|	"/"
+		|	"&&"
+
+	OpAdi	:=	"+"
+		|	"-"
+		|	"||"
+
+	OpCom	:=	"=="
+		|	"<>"
+		|	"<"
+		|	"="
+
+DOCUMENT END

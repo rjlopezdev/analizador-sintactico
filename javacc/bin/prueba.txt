@@ -1,0 +1,71 @@
+LengTLP Ejemplo:
+
+/** se declaran subprogramas # /** y variables y tipos
+
+Variables y, z : Real;
+
+SubPrg calcular(dir x1xy : Real, x2xz : Entero);
+
+Variables n1N, m2M : Logico;
+
+ParteEjec
+
+Leer(n1N, m2M);
+
+Condicional ( xxx == /** comentario # yyy + 5 - 7 * 5 * 6 - 7 * (y <> x + 23 - ere + 5 + "\"" + "\\" + "\n") )
+{
+cota1KR = cota1K / cota2R && (cota2cota - 12.50e+3);
+/** calcular (x2xy, 0);
+
+}
+
+{
+calcular (x2xy, 0);
+cota1KR = cota1K / cota2R && (cota2cota - 12.50e+3);
+ };
+
+Devolver;
+
+Grabar("x" && "y" + "\n");
+
+Fin;
+
+Union Reunion = re88CC : Entero, re99TT : unTipo;
+
+Variables r1r, r2r : Reunion;
+
+CiertoTipo SubPrg indicar(d : Caracter, t : elTipo);
+
+Union Registro = cc : Entero;
+
+Variables cota1K, cota2R : Logico; Variables rr : OtroRegistro;
+
+ParteEjec
+
+Leer(cota2R, QQQ);
+
+cota1KR = cota1K / cota2R && (cota2cota - 12.50e+3);
+
+resolver; /** sentencia de llamada
+
+Devolver rr.cc.ccc <> "2";
+
+Fin;
+
+Variables x : Entero;
+
+ParteEjec
+
+Condicional x <> y - z { Leer(r2r.re11cc); y = z; } { };
+
+Grabar(1, "1", 1.1e+00, uno1u * (1 + uno9u));
+
+Calcular(z, 1.000 * x);
+
+zqq = (minimo) / (maximo / minimo == 1);
+
+Condicional 0 <> y + x || false
+
+{ Grabar(xvw); } { indicar(cierto, resultado); };
+
+Fin. /** fin de todo esto

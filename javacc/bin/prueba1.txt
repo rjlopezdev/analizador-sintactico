@@ -1,0 +1,40 @@
+LengTLP PruebaUno:
+
+SubPrg minimasPrincipio
+
+  ParteEjec
+    Devolver algo;
+    principio;
+Fin;
+
+SubPrg minimasFinal
+
+  ParteEjec
+    final;
+    Devolver algo;
+Fin;
+
+SubPrg enMedio
+
+  ParteEjec
+    principio;
+    Devolver enmedio;
+    final;
+Fin;
+
+SubPrg muchasSentencias
+
+  ParteEjec
+    Uno;
+    Dos;
+    Devolver enmedio;
+    Tres;
+    Cuatro;
+    Devolver invalido;
+Fin;
+
+ParteEjec
+
+ pruebaDevolucion(p1, p2, p3, p4);
+
+Fin.
